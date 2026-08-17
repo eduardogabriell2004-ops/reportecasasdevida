@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Reporte Semanal · Casas de Vida</title>
+<meta name="description" content="Reporte semanal de Casas de Vida — Centro Cristiano Misión Global Maracay">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --c1:#00C19E;
+    --c2:#006C69;
+    --c3:#0097A3;
+    --c4:#62CCCC;
+    --gradient: linear-gradient(135deg, var(--c2) 0%, var(--c1) 45%, var(--c3) 75%, var(--c4) 100%);
+    --ink:#0B2E2C;
+    --ink-soft:#4B6664;
+    --bg:#EAF6F5;
+    --card:#FFFFFF;
+    --line:#DCEEEC;
+    --danger:#E0533D;
+    --radius:20px;
+    --shadow: 0 20px 45px -18px rgba(0,60,58,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:
+      radial-gradient(circle at 15% -10%, rgba(98,204,204,0.35), transparent 55%),
+      radial-gradient(circle at 110% 10%, rgba(0,193,158,0.25), transparent 45%),
+      var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:0 0 40px;
+  }
+  h1,h2,h3{font-family:'Poppins',sans-serif; margin:0;}
+  .app{
+    width:100%;
+    max-width:560px;
+    min-height:100vh;
+    background:var(--card);
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  @media(min-width:600px){
+    body{padding:32px 16px;}
+    .app{min-height:auto; border-radius:28px; overflow:hidden;}
+  }
+
+  /* HEADER */
+  header.top{
+    background:var(--gradient);
+    padding:28px 24px 22px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    width:260px; height:260px;
+    background:rgba(255,255,255,0.10);
+    border-radius:50%;
+    top:-140px; right:-80px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    position:relative;
+    z-index:1;
+  }
+  .logo-mono{
+    width:52px; height:52px;
+    border-radius:16px;
+    background:rgba(255,255,255,0.16);
+    border:1.5px solid rgba(255,255,255,0.55);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    backdrop-filter:blur(2px);
+  }
+  .logo-mono svg{width:30px; height:30px;}
+  .brand h1{font-size:16px; line-height:1.25; font-weight:700; letter-spacing:.2px;}
+  .brand p{margin:2px 0 0; font-size:12px; opacity:.92; font-weight:500;}
+  .form-title{
+    position:relative; z-index:1;
+    margin-top:20px;
+  }
+  .form-title h2{font-size:21px; font-weight:800;}
+  .form-title span{display:block; font-size:12.5px; opacity:.92; margin-top:4px; font-weight:500;}
+
+  /* STEPPER */
+  .stepper{
+    display:flex;
+    gap:6px;
+    padding:16px 24px 0;
+    background:var(--gradient);
+    position:relative;
+    z-index:1;
+  }
+  .stepper i{
+    flex:1;
+    height:5px;
+    border-radius:99px;
+    background:rgba(255,255,255,0.28);
+    overflow:hidden;
+  }
+  .stepper i em{
+    display:block; height:100%; width:0%;
+    background:#fff;
+    border-radius:99px;
+    transition:width .35s ease;
+  }
+  .step-label{
+    padding:10px 24px 20px;
+    background:var(--gradient);
+    color:#fff;
+    font-size:12.5px;
+    font-weight:600;
+    opacity:.95;
+    position:relative; z-index:1;
+  }
+
+  /* BODY */
+  main{
+    flex:1;
+    padding:22px 22px 110px;
+  }
+  .step{display:none; animation:fade .25s ease;}
+  .step.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .section-title{
+    font-size:13px;
+    font-weight:700;
+    color:var(--c2);
+    text-transform:uppercase;
+    letter-spacing:.6px;
+    margin:26px 0 12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .section-title:first-child{margin-top:0;}
+  .section-title::before{
+    content:"";
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--gradient);
+    flex-shrink:0;
+  }
+
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:6px;
+  }
+  .field label .opt{font-weight:500; color:var(--ink-soft); font-size:12px;}
+  .field input[type=text],
+  .field input[type=tel],
+  .field input[type=date],
+  .field input[type=time],
+  .field input[type=number],
+  .field select,
+  .field textarea{
+    width:100%;
+    padding:13px 14px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    font-size:15px;
+    font-family:inherit;
+    color:var(--ink);
+    background:#F7FCFC;
+    transition:border-color .15s, box-shadow .15s;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .field textarea{resize:vertical; min-height:80px;}
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none;
+    border-color:var(--c1);
+    box-shadow:0 0 0 3px rgba(0,193,158,0.18);
+    background:#fff;
+  }
+  .field select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23006C69' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    padding-right:38px;
+  }
+  .field.readonly input{background:#EFF7F6; color:var(--ink-soft); font-weight:600;}
+  .field small.hint{display:block; margin-top:5px; font-size:11.5px; color:var(--ink-soft);}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .grid3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+  @media(max-width:360px){.grid3{grid-template-columns:1fr 1fr;}}
+
+  .num-field label{font-size:12.5px;}
+  .num-field input{text-align:center; font-weight:700; font-size:16px;}
+
+  .total-box{
+    margin-top:4px;
+    background:linear-gradient(135deg, rgba(0,193,158,0.12), rgba(98,204,204,0.18));
+    border:1.5px solid rgba(0,151,163,0.25);
+    border-radius:14px;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .total-box span.lbl{font-size:13px; font-weight:700; color:var(--c2);}
+  .total-box span.val{font-size:22px; font-weight:800; color:var(--c2); font-family:'Poppins',sans-serif;}
+
+  .switch-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 14px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    margin-bottom:10px;
+    background:#F7FCFC;
+  }
+  .switch-row span{font-size:14px; font-weight:600;}
+  .switch{
+    position:relative; width:44px; height:26px; flex-shrink:0;
+  }
+  .switch input{position:absolute; opacity:0; width:100%; height:100%; margin:0; cursor:pointer; z-index:2;}
+  .switch .track{
+    position:absolute; inset:0; background:#D3E6E4; border-radius:99px; transition:.2s;
+  }
+  .switch .thumb{
+    position:absolute; top:3px; left:3px; width:20px; height:20px; background:#fff; border-radius:50%;
+    box-shadow:0 1px 3px rgba(0,0,0,0.25); transition:.2s;
+  }
+  .switch input:checked ~ .track{background:var(--gradient);}
+  .switch input:checked ~ .thumb{transform:translateX(18px);}
+
+  .money-group{
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:14px;
+    background:#F7FCFC;
+  }
+  .money-group h4{font-size:13px; font-weight:700; margin:0 0 10px; color:var(--c2);}
+
+  /* FOOTER NAV */
+  .nav{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    padding:14px 22px;
+    background:#fff;
+    border-top:1px solid var(--line);
+    display:flex;
+    gap:10px;
+    z-index:5;
+  }
+  @media(min-width:600px){ .nav{position:sticky;} }
+  .btn{
+    flex:1;
+    padding:15px 18px;
+    border-radius:14px;
+    font-size:15px;
+    font-weight:700;
+    font-family:inherit;
+    border:none;
+    cursor:pointer;
+    transition:transform .12s, opacity .12s, box-shadow .12s;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{
+    background:var(--gradient);
+    color:#fff;
+    box-shadow:0 10px 24px -8px rgba(0,108,105,0.55);
+  }
+  .btn-ghost{
+    background:#EFF7F6;
+    color:var(--c2);
+    flex:0 0 110px;
+  }
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
+
+  .error-msg{
+    color:var(--danger);
+    font-size:12px;
+    font-weight:600;
+    margin-top:5px;
+    display:none;
+  }
+  .field.invalid input, .field.invalid select{border-color:var(--danger); box-shadow:0 0 0 3px rgba(224,83,61,0.12);}
+  .field.invalid .error-msg{display:block;}
+
+  .type-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:linear-gradient(135deg, rgba(0,108,105,0.10), rgba(0,193,158,0.14));
+    color:var(--c2);
+    font-size:12px;
+    font-weight:700;
+    padding:7px 12px;
+    border-radius:99px;
+    margin-bottom:18px;
+  }
+  .type-badge .dot{width:7px; height:7px; border-radius:50%; background:var(--gradient);}
+
+  /* SUCCESS SCREEN */
+  .success-screen{
+    display:none;
+    flex:1;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:50px 32px;
+  }
+  .success-screen.active{display:flex;}
+  .check-circle{
+    width:88px; height:88px;
+    border-radius:50%;
+    background:var(--gradient);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:22px;
+    box-shadow:0 16px 34px -10px rgba(0,108,105,0.5);
+    animation:pop .4s ease;
+  }
+  @keyframes pop{0%{transform:scale(0.6); opacity:0;} 60%{transform:scale(1.08);} 100%{transform:scale(1); opacity:1;}}
+  .success-screen h2{font-size:21px; margin-bottom:10px; color:var(--c2);}
+  .success-screen p{font-size:14.5px; color:var(--ink-soft); line-height:1.6; max-width:340px;}
+  .success-screen .btn-primary{margin-top:26px; max-width:220px;}
+
+  .loading-overlay{
+    position:fixed; inset:0; background:rgba(11,46,44,0.45);
+    display:none; align-items:center; justify-content:center; z-index:50;
+  }
+  .loading-overlay.active{display:flex;}
+  .spinner{
+    width:46px; height:46px; border-radius:50%;
+    border:4px solid rgba(255,255,255,0.35);
+    border-top-color:#fff;
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .banner-error{
+    display:none;
+    background:#FDEAE6;
+    color:var(--danger);
+    border:1.5px solid #F3C4B9;
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:16px;
+  }
+  .banner-error.active{display:block;}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo-mono">
+        <!-- Placeholder: reemplaza este SVG por <img src="assets/logo.png" alt="Logo"> cuando tengas el logo oficial -->
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 3C11.7 3 5 9.7 5 18c0 11 15 19 15 19s15-8 15-19C35 9.7 28.3 3 20 3z" stroke="#fff" stroke-width="2.2" fill="rgba(255,255,255,0.14)"/>
+          <path d="M20 12v14M13 19h14" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Centro Cristiano Misión Global</h1>
+        <p>Maracay · Plan Vida Abundante</p>
+      </div>
+    </div>
+    <div class="form-title">
+      <h2>Reporte Semanal de Casa de Vida</h2>
+      <span>Completa la información de tu Casa de Vida cada semana</span>
+    </div>
+  </header>
+
+  <div class="stepper" id="stepper">
+    <i><em></em></i><i><em></em></i><i><em></em></i><i><em></em></i><i><em></em></i>
+  </div>
+  <div class="step-label" id="stepLabel">Paso 1 de 5 · Identificación</div>
+
+  <form id="reportForm" novalidate>
+    <main>
+
+      <div class="banner-error" id="banner">No pudimos enviar tu reporte. Verifica tu conexión e intenta de nuevo.</div>
+
+      <!-- STEP 1: IDENTIFICACION -->
+      <div class="step active" data-step="1">
+        <div class="section-title">Identificación</div>
+
+        <div class="field" id="f_fecha">
+          <label for="fecha">Fecha que estás reportando</label>
+          <input type="date" id="fecha" required>
+          <div class="error-msg">Selecciona la fecha del reporte.</div>
+        </div>
+
+        <div class="field" id="f_red">
+          <label for="red">Red</label>
+          <select id="red" required>
+            <option value="" disabled selected>Selecciona tu red</option>
+          </select>
+          <div class="error-msg">Selecciona una red.</div>
+        </div>
+
+        <div class="field readonly">
+          <label for="liderRed">Líder de Red</label>
+          <input type="text" id="liderRed" readonly placeholder="Se completa automáticamente">
+        </div>
+
+        <div class="field" id="f_casa">
+          <label for="casa">Casa de Vida</label>
+          <select id="casa" required disabled>
+            <option value="" disabled selected>Primero selecciona tu red</option>
+          </select>
+          <div class="error-msg">Selecciona tu casa de vida.</div>
+        </div>
+
+        <div class="field" id="f_liderNombre">
+          <label for="liderNombre" id="liderNombreLabel">Nombre del Líder de Vida</label>
+          <input type="text" id="liderNombre" placeholder="Escribe tu nombre completo" required>
+          <div class="error-msg">Escribe el nombre del líder/guía.</div>
+        </div>
+      </div>
+
+      <!-- STEP 2: ASISTENCIA -->
+      <div class="step" data-step="2">
+        <span class="type-badge" id="typeBadge2"><span class="dot"></span><span>Casa de Vida</span></span>
+
+        <div class="section-title">Miembros (números)</div>
+        <div class="grid3" id="miembrosGrid"></div>
+
+        <div class="section-title">Decisiones de fe</div>
+        <div class="grid3" id="decisionesGrid"></div>
+
+        <div class="total-box">
+          <span class="lbl">Total de asistencia</span>
+          <span class="val" id="totalAsistencia">0</span>
+        </div>
+      </div>
+
+      <!-- STEP 3: DOMINICAL Y PARTICIPACION -->
+      <div class="step" data-step="3">
+        <div class="section-title">Asistieron a la reunión dominical</div>
+        <div class="grid3" id="dominicalGrid"></div>
+
+        <div class="section-title">Participación del ciclo</div>
+        <div class="grid3">
+          <div class="field num-field"><label>Misión Vida</label><input type="number" min="0" inputmode="numeric" id="p_misionVida" value="0"></div>
+          <div class="field num-field"><label>Consolidación</label><input type="number" min="0" inputmode="numeric" id="p_consolidacion" value="0"></div>
+          <div class="field num-field"><label>Pasos de Vida</label><input type="number" min="0" inputmode="numeric" id="p_pasosVida" value="0"></div>
+        </div>
+
+        <div class="section-title">Asistencia de la Casa de Vida a</div>
+        <div class="grid3">
+          <div class="field num-field"><label>V.E.A.</label><input type="number" min="0" inputmode="numeric" id="a_vea" value="0"></div>
+          <div class="field num-field"><label>Escuela de Vida</label><input type="number" min="0" inputmode="numeric" id="a_escuelaVida" value="0"></div>
+          <div class="field num-field"><label>Seminario</label><input type="number" min="0" inputmode="numeric" id="a_seminario" value="0"></div>
+        </div>
+
+        <div class="section-title">Líderes que asistieron</div>
+        <div id="lideresGrid"></div>
+      </div>
+
+      <!-- STEP 4: INFORME FINANCIERO -->
+      <div class="step" data-step="4">
+        <div class="section-title">Informe financiero</div>
+
+        <div class="money-group">
+          <h4>Bolívares (Bs)</h4>
+          <div class="grid2">
+            <div class="field num-field"><label>Diezmo (Bs)</label><input type="number" min="0" step="0.01" inputmode="decimal" id="fin_diezmoBs" value="0"></div>
+            <div class="field num-field"><label>Ofrenda (Bs)</label><input type="number" min="0" step="0.01" inputmode="decimal" id="fin_ofrendaBs" value="0"></div>
+          </div>
+          <div class="total-box">
+            <span class="lbl">Total Bs</span>
+            <span class="val" id="totalBs">0</span>
+          </div>
+        </div>
+
+        <div class="money-group">
+          <h4>Dólares (USD)</h4>
+          <div class="grid2">
+            <div class="field num-field"><label>Diezmo (USD)</label><input type="number" min="0" step="0.01" inputmode="decimal" id="fin_diezmoUsd" value="0"></div>
+            <div class="field num-field"><label>Ofrenda (USD)</label><input type="number" min="0" step="0.01" inputmode="decimal" id="fin_ofrendaUsd" value="0"></div>
+          </div>
+          <div class="total-box">
+            <span class="lbl">Total USD</span>
+            <span class="val" id="totalUsd">0</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="fin_pagoMovilRef">N.° de referencia (Pago Móvil) <span class="opt">(opcional)</span></label>
+          <input type="text" id="fin_pagoMovilRef" placeholder="Ej: 001234">
+        </div>
+      </div>
+
+      <!-- STEP 5: NOVEDADES -->
+      <div class="step" data-step="5">
+        <div class="section-title">Novedades</div>
+
+        <div class="field" id="f_direccion">
+          <label for="nov_direccion">Dirección</label>
+          <input type="text" id="nov_direccion" placeholder="Dirección donde se realizó la Casa de Vida" required>
+          <div class="error-msg">Escribe la dirección.</div>
+        </div>
+
+        <div class="field" id="f_telefono">
+          <label for="nov_telefono">Teléfono de contacto</label>
+          <input type="tel" id="nov_telefono" placeholder="Ej: 0414-1234567" required>
+          <div class="error-msg">Escribe un teléfono de contacto.</div>
+        </div>
+
+        <div class="grid2">
+          <div class="field" id="f_dia">
+            <label for="nov_dia">Día</label>
+            <select id="nov_dia" required>
+              <option value="" disabled selected>Selecciona</option>
+              <option>Lunes</option><option>Martes</option><option>Miércoles</option>
+              <option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
+            </select>
+            <div class="error-msg">Selecciona el día.</div>
+          </div>
+          <div class="field" id="f_hora">
+            <label for="nov_hora">Hora</label>
+            <input type="time" id="nov_hora" required>
+            <div class="error-msg">Selecciona la hora.</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="nov_observaciones">Observaciones <span class="opt">(opcional)</span></label>
+          <textarea id="nov_observaciones" placeholder="Testimonios, novedades u otros detalles..."></textarea>
+        </div>
+      </div>
+
+    </main>
+
+    <div class="nav">
+      <button type="button" class="btn btn-ghost" id="btnBack">Atrás</button>
+      <button type="button" class="btn btn-primary" id="btnNext">Siguiente</button>
+      <button type="submit" class="btn btn-primary" id="btnSubmit" style="display:none;">Enviar reporte</button>
+    </div>
+  </form>
+
+  <div class="success-screen" id="successScreen">
+    <div class="check-circle">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2>¡Reporte enviado!</h2>
+    <p>Gracias por tu fidelidad. Tu reporte de Casa de Vida fue registrado correctamente.</p>
+    <button type="button" class="btn btn-primary" id="btnNewReport">Enviar otro reporte</button>
+  </div>
+
+</div>
+
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+
+<script>
+/* ============================================================
+   CONFIGURACIÓN: pega aquí la URL de tu Google Apps Script
+   Web App (ver instrucciones en README.md)
+   ============================================================ */
+const SHEET_WEBAPP_URL = "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT";
+
+/* ============================================================
+   DATOS: Redes, Líderes de Red y Casas de Vida
+   ============================================================ */
+const REDES = [
+  {
+    nombre: "Red 1",
+    lider: "Pastora Sandra de Peñaloza",
+    casas: [
+      { nombre: "Casa Grupal Choroní", tipo: "grupal" },
+      { nombre: "Casa Grupal la Pantojera", tipo: "grupal" }
+    ]
+  },
+  {
+    nombre: "Red 2",
+    lider: "Edimar Bello",
+    casas: [
+      { nombre: "Casa Grupal Torre 48", tipo: "grupal" },
+      { nombre: "Casa Grupal Torre 35", tipo: "grupal" },
+      { nombre: "Casa Grupal Sector 10", tipo: "grupal" },
+      { nombre: "Casa Grupal Ud 15", tipo: "grupal" },
+      { nombre: "Casa Grupal Caña de Azúcar", tipo: "grupal" },
+      { nombre: "Casa Familiar Corre 56", tipo: "familiar" },
+      { nombre: "Casa Familiar Torre 65", tipo: "familiar" }
+    ]
+  },
+  {
+    nombre: "Red 3",
+    lider: "Pastor Jorge Agelvis",
+    casas: [
+      { nombre: "Casa Grupal Santa Eduvigis", tipo: "grupal" },
+      { nombre: "Casa Grupal Barrio Sucre", tipo: "grupal" },
+      { nombre: "Casa Grupal Las Maravillas", tipo: "grupal" }
+    ]
+  },
+  {
+    nombre: "Red 4",
+    lider: "Jean Arzola",
+    casas: [
+      { nombre: "Casa Grupal Santa Rita", tipo: "grupal" },
+      { nombre: "Casa Grupal Vereda 4", tipo: "grupal" },
+      { nombre: "Casa Grupal Guasimal", tipo: "grupal" },
+      { nombre: "Casa Familiar Av. Aragua", tipo: "familiar" }
+    ]
+  },
+  {
+    nombre: "Red 5",
+    lider: "Pastor Jairo Sequera",
+    casas: [
+      { nombre: "Casa Grupal Calle Carta Blanca", tipo: "grupal" },
+      { nombre: "Casa Grupal Base Sucre", tipo: "grupal" },
+      { nombre: 'Casa Empresarial "Studio Nissin y Spa"', tipo: "empresarial" },
+      { nombre: 'Casa Empresarial "Inversiones H&C 2020"', tipo: "empresarial" },
+      { nombre: 'Casa Empresarial "Suministro Jireh"', tipo: "empresarial" }
+    ]
+  },
+  {
+    nombre: "Red 6",
+    lider: "Pastor Misael Morales",
+    casas: [
+      { nombre: "Casa Grupal 8 de Marzo", tipo: "grupal" },
+      { nombre: "Casa Grupal El Samán", tipo: "grupal" },
+      { nombre: "U.E Los Bagres", tipo: "empresarial" }
+    ]
+  }
+];
+
+/* ============================================================
+   CONFIGURACIÓN DE CAMPOS POR TIPO DE CASA DE VIDA
+   ============================================================ */
+const TYPE_LABELS = { grupal: "Casa de Vida Grupal", familiar: "Casa de Vida Familiar", empresarial: "Casa de Vida Empresarial" };
+const LIDER_LABELS = { grupal: "Nombre del Líder de Vida", familiar: "Nombre del Guía de Casa de Vida Familiar", empresarial: "Nombre del Líder de Vida" };
+
+const FIELD_CONFIG = {
+  grupal: {
+    miembros: [
+      ["m_bautizados","Bautizados"], ["m_discipulos","Discípulos"], ["m_invitados","Invitados"],
+      ["m_ninos","Niños"], ["m_ausentes","Ausentes"], ["m_visitasHogares","Visitas a hogares"]
+    ],
+    totalKeys: ["m_bautizados","m_discipulos","m_invitados","m_ninos","m_visitasHogares"],
+    decisiones: [["d_adultos","Adultos"], ["d_ninos","Niños"], ["d_reconciliados","Reconciliados"]],
+    dominical: [["dom_hermanos","Hermanos"], ["dom_invitados","Invitados"], ["dom_ninos","Niños"]],
+    lideres: [["l_liderVida","Líder de Vida"], ["l_aprendiz","Aprendiz"], ["l_maestroNinos","Maestro de Niños"], ["l_anfitrion","Anfitrión"]]
+  },
+  familiar: {
+    miembros: [
+      ["m_adultos26","Adultos (+26 años)"], ["m_jovenes","Jóvenes (13-25 años)"], ["m_ninos112","Niños (1-12 años)"],
+      ["m_discipulos","Discípulos"], ["m_invitados","Invitados"], ["m_ausentes","Ausentes"]
+    ],
+    totalKeys: ["m_adultos26","m_jovenes","m_ninos112","m_discipulos","m_invitados"],
+    decisiones: [["d_adultos","Adultos"], ["d_ninos","Niños"], ["d_reconciliados","Reconciliados"]],
+    dominical: [["dom_adultos","Adultos"], ["dom_jovenes","Jóvenes"], ["dom_ninos","Niños"]],
+    lideres: [["l_guiaVida","Guía de Vida"]]
+  },
+  empresarial: {
+    miembros: [
+      ["m_bautizados","Bautizados"], ["m_discipulos","Discípulos"], ["m_invitados","Invitados"],
+      ["m_ausentes","Ausentes"], ["m_visitasHogares","Visitas a hogares"]
+    ],
+    totalKeys: ["m_bautizados","m_discipulos","m_invitados","m_visitasHogares"],
+    decisiones: [["d_adultos","Adultos"], ["d_reconciliados","Reconciliados"]],
+    dominical: [["dom_hermanos","Hermanos"], ["dom_invitados","Invitados"]],
+    lideres: [["l_liderVida","Líder de Vida"], ["l_anfitrion","Anfitrión"]]
+  }
+};
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+let currentStep = 1;
+const TOTAL_STEPS = 5;
+let currentTipo = "grupal";
+let dynamicInputs = {}; // key -> element ref (number/switch)
+
+const form = document.getElementById("reportForm");
+const redSelect = document.getElementById("red");
+const liderRedInput = document.getElementById("liderRed");
+const casaSelect = document.getElementById("casa");
+const casaField = document.getElementById("f_casa");
+const liderNombreLabel = document.getElementById("liderNombreLabel");
+
+/* Poblar redes */
+REDES.forEach((r, i) => {
+  const opt = document.createElement("option");
+  opt.value = i;
+  opt.textContent = r.nombre;
+  redSelect.appendChild(opt);
+});
+
+redSelect.addEventListener("change", () => {
+  const red = REDES[redSelect.value];
+  liderRedInput.value = red.lider;
+  casaSelect.innerHTML = '<option value="" disabled selected>Selecciona tu Casa de Vida</option>';
+  red.casas.forEach((c, i) => {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = c.nombre;
+    opt.dataset.tipo = c.tipo;
+    casaSelect.appendChild(opt);
+  });
+  casaSelect.disabled = false;
+  clearFieldError(casaField);
+});
+
+casaSelect.addEventListener("change", () => {
+  const opt = casaSelect.options[casaSelect.selectedIndex];
+  const tipo = opt.dataset.tipo;
+  if (tipo !== currentTipo) {
+    currentTipo = tipo;
+    buildDynamicFields(tipo);
+  }
+  liderNombreLabel.textContent = LIDER_LABELS[tipo];
+  document.querySelectorAll(".type-badge span:last-child").forEach(el => el.textContent = TYPE_LABELS[tipo]);
+});
+
+/* ============================================================
+   CONSTRUCCIÓN DE CAMPOS DINÁMICOS SEGÚN TIPO DE CASA
+   ============================================================ */
+function numField(key, label, container) {
+  const div = document.createElement("div");
+  div.className = "field num-field";
+  div.innerHTML = `<label>${label}</label><input type="number" min="0" inputmode="numeric" value="0" data-key="${key}">`;
+  container.appendChild(div);
+  const input = div.querySelector("input");
+  dynamicInputs[key] = input;
+  return input;
+}
+
+function switchField(key, label, container) {
+  const div = document.createElement("div");
+  div.className = "switch-row";
+  div.innerHTML = `<span>${label}</span>
+    <label class="switch">
+      <input type="checkbox" data-key="${key}">
+      <span class="track"></span><span class="thumb"></span>
+    </label>`;
+  container.appendChild(div);
+  dynamicInputs[key] = div.querySelector("input");
+}
+
+function buildDynamicFields(tipo) {
+  dynamicInputs = { ...pickPersistentInputs() };
+  const cfg = FIELD_CONFIG[tipo];
+
+  const miembrosGrid = document.getElementById("miembrosGrid");
+  miembrosGrid.innerHTML = "";
+  cfg.miembros.forEach(([k, l]) => numField(k, l, miembrosGrid));
+
+  const decisionesGrid = document.getElementById("decisionesGrid");
+  decisionesGrid.innerHTML = "";
+  cfg.decisiones.forEach(([k, l]) => numField(k, l, decisionesGrid));
+
+  const dominicalGrid = document.getElementById("dominicalGrid");
+  dominicalGrid.innerHTML = "";
+  cfg.dominical.forEach(([k, l]) => numField(k, l, dominicalGrid));
+
+  const lideresGrid = document.getElementById("lideresGrid");
+  lideresGrid.innerHTML = "";
+  cfg.lideres.forEach(([k, l]) => switchField(k, l, lideresGrid));
+
+  // listeners para recalcular total de asistencia
+  cfg.miembros.forEach(([k]) => {
+    dynamicInputs[k].addEventListener("input", updateTotalAsistencia);
+  });
+  updateTotalAsistencia();
+}
+
+function pickPersistentInputs() {
+  // conserva referencias a inputs fijos (participación/asistencia a) que no cambian por tipo
+  const fixed = {};
+  ["p_misionVida","p_consolidacion","p_pasosVida","a_vea","a_escuelaVida","a_seminario"].forEach(id => {
+    fixed[id] = document.getElementById(id);
+  });
+  return fixed;
+}
+
+function updateTotalAsistencia() {
+  const cfg = FIELD_CONFIG[currentTipo];
+  let total = 0;
+  cfg.totalKeys.forEach(k => { total += Number(dynamicInputs[k].value) || 0; });
+  document.getElementById("totalAsistencia").textContent = total;
+}
+
+/* Inicializa con tipo por defecto */
+buildDynamicFields(currentTipo);
+
+/* ============================================================
+   TOTALES FINANCIEROS
+   ============================================================ */
+function bindMoneyTotals(diezmoId, ofrendaId, totalElId) {
+  const d = document.getElementById(diezmoId);
+  const o = document.getElementById(ofrendaId);
+  const t = document.getElementById(totalElId);
+  const recalc = () => {
+    const total = (Number(d.value) || 0) + (Number(o.value) || 0);
+    t.textContent = total.toLocaleString("es-VE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+  d.addEventListener("input", recalc);
+  o.addEventListener("input", recalc);
+  recalc();
+}
+bindMoneyTotals("fin_diezmoBs", "fin_ofrendaBs", "totalBs");
+bindMoneyTotals("fin_diezmoUsd", "fin_ofrendaUsd", "totalUsd");
+
+/* ============================================================
+   NAVEGACIÓN ENTRE PASOS
+   ============================================================ */
+const stepLabels = {
+  1: "Paso 1 de 5 · Identificación",
+  2: "Paso 2 de 5 · Asistencia",
+  3: "Paso 3 de 5 · Reunión dominical y participación",
+  4: "Paso 4 de 5 · Informe financiero",
+  5: "Paso 5 de 5 · Novedades"
+};
+
+function renderStep() {
+  document.querySelectorAll(".step").forEach(s => {
+    s.classList.toggle("active", Number(s.dataset.step) === currentStep);
+  });
+  document.getElementById("stepLabel").textContent = stepLabels[currentStep];
+  document.querySelectorAll("#stepper i em").forEach((em, i) => {
+    em.style.width = (i < currentStep) ? "100%" : "0%";
+  });
+  document.getElementById("btnBack").style.visibility = currentStep === 1 ? "hidden" : "visible";
+  const isLast = currentStep === TOTAL_STEPS;
+  document.getElementById("btnNext").style.display = isLast ? "none" : "block";
+  document.getElementById("btnSubmit").style.display = isLast ? "block" : "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function fieldWrap(inputId) {
+  return document.getElementById(inputId).closest(".field");
+}
+function setFieldError(el, hasError) {
+  if (!el) return;
+  el.classList.toggle("invalid", hasError);
+}
+function clearFieldError(el) { setFieldError(el, false); }
+
+function validateStep(step) {
+  let ok = true;
+  if (step === 1) {
+    const checks = [
+      ["fecha", document.getElementById("fecha").value],
+      ["red", redSelect.value],
+      ["casa", casaSelect.value],
+      ["liderNombre", document.getElementById("liderNombre").value.trim()]
+    ];
+    checks.forEach(([id, val]) => {
+      const wrap = fieldWrap(id);
+      const invalid = !val;
+      setFieldError(wrap, invalid);
+      if (invalid) ok = false;
+    });
+  }
+  if (step === 5) {
+    const checks = ["nov_direccion", "nov_telefono", "nov_dia", "nov_hora"];
+    checks.forEach(id => {
+      const wrap = fieldWrap(id);
+      const invalid = !document.getElementById(id).value.trim();
+      setFieldError(wrap, invalid);
+      if (invalid) ok = false;
+    });
+  }
+  return ok;
+}
+
+document.getElementById("btnNext").addEventListener("click", () => {
+  if (!validateStep(currentStep)) return;
+  if (currentStep < TOTAL_STEPS) {
+    currentStep++;
+    renderStep();
+  }
+});
+document.getElementById("btnBack").addEventListener("click", () => {
+  if (currentStep > 1) {
+    currentStep--;
+    renderStep();
+  }
+});
+
+/* ============================================================
+   ENVÍO DEL FORMULARIO
+   ============================================================ */
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!validateStep(5)) return;
+
+  const banner = document.getElementById("banner");
+  banner.classList.remove("active");
+
+  const red = REDES[redSelect.value];
+  const casaOpt = casaSelect.options[casaSelect.selectedIndex];
+
+  const payload = {
+    tipo: currentTipo,
+    fecha: document.getElementById("fecha").value,
+    red: red.nombre,
+    liderRed: red.lider,
+    casaVida: casaOpt.textContent,
+    liderNombre: document.getElementById("liderNombre").value.trim(),
+    totalAsistencia: document.getElementById("totalAsistencia").textContent,
+    p_misionVida: dynamicInputs.p_misionVida.value || 0,
+    p_consolidacion: dynamicInputs.p_consolidacion.value || 0,
+    p_pasosVida: dynamicInputs.p_pasosVida.value || 0,
+    a_vea: dynamicInputs.a_vea.value || 0,
+    a_escuelaVida: dynamicInputs.a_escuelaVida.value || 0,
+    a_seminario: dynamicInputs.a_seminario.value || 0,
+    fin_diezmoBs: document.getElementById("fin_diezmoBs").value || 0,
+    fin_ofrendaBs: document.getElementById("fin_ofrendaBs").value || 0,
+    fin_totalBs: document.getElementById("totalBs").textContent,
+    fin_diezmoUsd: document.getElementById("fin_diezmoUsd").value || 0,
+    fin_ofrendaUsd: document.getElementById("fin_ofrendaUsd").value || 0,
+    fin_totalUsd: document.getElementById("totalUsd").textContent,
+    fin_pagoMovilRef: document.getElementById("fin_pagoMovilRef").value.trim(),
+    nov_direccion: document.getElementById("nov_direccion").value.trim(),
+    nov_telefono: document.getElementById("nov_telefono").value.trim(),
+    nov_dia: document.getElementById("nov_dia").value,
+    nov_hora: document.getElementById("nov_hora").value,
+    nov_observaciones: document.getElementById("nov_observaciones").value.trim()
+  };
+
+  const cfg = FIELD_CONFIG[currentTipo];
+  cfg.miembros.forEach(([k]) => payload[k] = dynamicInputs[k].value || 0);
+  cfg.decisiones.forEach(([k]) => payload[k] = dynamicInputs[k].value || 0);
+  cfg.dominical.forEach(([k]) => payload[k] = dynamicInputs[k].value || 0);
+  cfg.lideres.forEach(([k]) => payload[k] = dynamicInputs[k].checked ? "Sí" : "No");
+
+  if (SHEET_WEBAPP_URL.includes("PEGA_AQUI")) {
+    document.getElementById("loadingOverlay").classList.remove("active");
+    banner.textContent = "Falta configurar la URL de Google Sheets en index.html (SHEET_WEBAPP_URL).";
+    banner.classList.add("active");
+    return;
+  }
+
+  document.getElementById("loadingOverlay").classList.add("active");
+
+  try {
+    const res = await fetch(SHEET_WEBAPP_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    document.getElementById("loadingOverlay").classList.remove("active");
+    if (data.result === "success") {
+      document.getElementById("app").style.display = "none";
+      document.getElementById("successScreen").classList.add("active");
+    } else {
+      throw new Error(data.message || "Error desconocido");
+    }
+  } catch (err) {
+    document.getElementById("loadingOverlay").classList.remove("active");
+    banner.classList.add("active");
+  }
+});
+
+document.getElementById("btnNewReport").addEventListener("click", () => {
+  form.reset();
+  casaSelect.innerHTML = '<option value="" disabled selected>Primero selecciona tu red</option>';
+  casaSelect.disabled = true;
+  liderRedInput.value = "";
+  currentTipo = "grupal";
+  buildDynamicFields(currentTipo);
+  document.getElementById("totalBs").textContent = "0";
+  document.getElementById("totalUsd").textContent = "0";
+  document.querySelectorAll(".field.invalid").forEach(f => f.classList.remove("invalid"));
+  currentStep = 1;
+  renderStep();
+  document.getElementById("successScreen").classList.remove("active");
+  document.getElementById("app").style.display = "flex";
+});
+
+renderStep();
+</script>
+</body>
+</html>
