@@ -94,13 +94,6 @@ Cada envío del formulario crea una fila nueva en la pestaña correspondiente de
 Líder de Red ya identificados en las primeras columnas. Puedes usar el **filtro de Google
 Sheets** o crear una vista filtrada por Red para que cada líder de red vea solo sus casas.
 
-## Notas sobre los datos configurados
-
-- **Red 2 – "Casa Familiar Corre 56"**: se dejó tal como se indicó; si en realidad es
-  "Torre 56", avísame para corregirlo en el código.
-- **Red 6 – "U.E Los Bagres"**: no tenía tipo de casa especificado, se clasificó
-  temporalmente como *Casa Empresarial*. Avísame si debe ser Grupal o Familiar.
-
 ## Verificación rápida
 
 Antes de compartir el link con los líderes:
