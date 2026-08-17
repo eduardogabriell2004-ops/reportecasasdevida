@@ -11,13 +11,14 @@ Líderes de Red puedan consultarlos.
 - `apps-script/Code.gs` — Script que conecta el formulario con Google Sheets.
 - `README.md` — Esta guía.
 
-## Paso 1 — Crear la hoja de Google Sheets
+## Paso 1 — La hoja de Google Sheets
 
-1. Entra a [Google Sheets](https://sheets.google.com) y crea una hoja nueva.
-2. Ponle un nombre, por ejemplo: **"Reporte Casas de Vida — CCMG"**.
-3. No necesitas crear las pestañas manualmente: el script las crea solo (Casas Grupales,
-   Casas Familiares, Casas Empresariales) la primera vez que alguien envía un reporte de
-   cada tipo.
+Hoja oficial del proyecto:
+https://docs.google.com/spreadsheets/d/1e2ebw_UpmM4A5dOdca_hp15OiyBmIKIIH3Di7JDsMVg/edit
+
+No necesitas crear las pestañas manualmente: el script las crea solo (Casas Grupales,
+Casas Familiares, Casas Empresariales) la primera vez que alguien envía un reporte de
+cada tipo.
 
 ## Paso 2 — Instalar el script (Apps Script)
 
