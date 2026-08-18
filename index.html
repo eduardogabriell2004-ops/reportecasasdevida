@@ -337,8 +337,72 @@
   }
   @keyframes pop{0%{transform:scale(0.6); opacity:0;} 60%{transform:scale(1.08);} 100%{transform:scale(1); opacity:1;}}
   .success-screen h2{font-size:21px; margin-bottom:10px; color:var(--c2);}
-  .success-screen p{font-size:14.5px; color:var(--ink-soft); line-height:1.6; max-width:340px;}
-  .success-screen .btn-primary{margin-top:26px; max-width:220px;}
+  .success-screen > p{font-size:14.5px; color:var(--ink-soft); line-height:1.6; max-width:340px;}
+  .success-screen .btn-primary{flex:none; width:100%; margin-top:22px; max-width:240px;}
+
+  .motivation-card{
+    position:relative;
+    margin-top:24px;
+    width:100%;
+    max-width:380px;
+    background:var(--gradient);
+    border-radius:18px;
+    padding:26px 24px 20px;
+    box-shadow:0 18px 38px -14px rgba(0,108,105,0.5);
+    overflow:hidden;
+  }
+  .motivation-card::after{
+    content:"";
+    position:absolute;
+    width:180px; height:180px;
+    background:rgba(255,255,255,0.10);
+    border-radius:50%;
+    bottom:-90px; left:-60px;
+  }
+  .motivation-card .quote-mark{
+    position:relative; z-index:1;
+    display:block;
+    font-family:'Poppins',sans-serif;
+    font-size:44px;
+    line-height:1;
+    color:rgba(255,255,255,0.55);
+    margin-bottom:4px;
+  }
+  .motivation-card p{
+    position:relative; z-index:1;
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    line-height:1.55;
+    font-family:'Poppins',sans-serif;
+    margin:0 0 16px;
+    text-align:left;
+  }
+  .motivation-brand{
+    position:relative; z-index:1;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,0.28);
+  }
+  .motivation-brand .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:#fff; flex-shrink:0;
+  }
+  .motivation-brand span:last-child{
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.3px;
+    color:rgba(255,255,255,0.92);
+  }
+  .screenshot-hint{
+    display:block;
+    margin-top:16px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+  }
 
   .loading-overlay{
     position:fixed; inset:0; background:rgba(11,46,44,0.45);
@@ -370,6 +434,7 @@
 <body>
 
 <div class="app" id="app">
+  <div id="formView">
 
   <header class="top">
     <div class="brand">
@@ -560,12 +625,25 @@
     </div>
   </form>
 
+  </div>
+
   <div class="success-screen" id="successScreen">
     <div class="check-circle">
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
     <h2>¡Reporte enviado!</h2>
-    <p>Gracias por tu fidelidad. Tu reporte de Casa de Vida fue registrado correctamente.</p>
+    <p id="successMeta">Tu reporte fue registrado correctamente.</p>
+
+    <div class="motivation-card">
+      <span class="quote-mark">&ldquo;</span>
+      <p id="motivationText"></p>
+      <div class="motivation-brand">
+        <span class="dot"></span>
+        <span>Centro Cristiano Misión Global · Plan Vida Abundante</span>
+      </div>
+    </div>
+
+    <span class="screenshot-hint">📸 Toma una captura como comprobante de tu reporte</span>
     <button type="button" class="btn btn-primary" id="btnNewReport">Enviar otro reporte</button>
   </div>
 
@@ -684,6 +762,25 @@ const FIELD_CONFIG = {
     lideres: [["l_liderVida","Líder de Vida"], ["l_anfitrion","Anfitrión"]]
   }
 };
+
+/* ============================================================
+   MENSAJES MOTIVACIONALES (pantalla de éxito)
+   ============================================================ */
+const MOTIVATIONAL_MESSAGES = [
+  "Lo estás haciendo increíble. Dios está viendo tu esfuerzo, ¡sigue así!",
+  "Cada Casa de Vida que cuidas es una semilla que Dios está haciendo crecer. ¡Gracias por tu fidelidad!",
+  "Tu constancia no pasa desapercibida para Dios. Él ve cada semana que te esfuerzas por Su reino.",
+  "Eres una pieza clave en el Plan Vida Abundante. ¡Sigue liderando con pasión!",
+  "\"No os canséis de hacer bien, porque a su tiempo segaréis, si no desmayamos.\" (Gálatas 6:9)",
+  "Detrás de cada reporte hay vidas siendo transformadas. ¡Tu labor vale oro!",
+  "Sigue firme, líder. Lo que siembras en tu Casa de Vida se cosecha en la eternidad.",
+  "Dios honra al que es fiel en lo poco. ¡Vas por buen camino!",
+  "Tu Casa de Vida es un espacio donde el cielo toca la tierra. ¡Gracias por servir con excelencia!",
+  "\"Y todo lo que hagáis, hacedlo de corazón, como para el Señor.\" (Colosenses 3:23) ¡Excelente trabajo!"
+];
+function randomMotivation() {
+  return MOTIVATIONAL_MESSAGES[Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)];
+}
 
 /* ============================================================
    ESTADO
@@ -964,7 +1061,10 @@ form.addEventListener("submit", async (e) => {
     const data = await res.json();
     document.getElementById("loadingOverlay").classList.remove("active");
     if (data.result === "success") {
-      document.getElementById("app").style.display = "none";
+      document.getElementById("successMeta").textContent =
+        `${payload.liderNombre} · ${payload.casaVida} · ${payload.fecha}`;
+      document.getElementById("motivationText").textContent = randomMotivation();
+      document.getElementById("formView").style.display = "none";
       document.getElementById("successScreen").classList.add("active");
     } else {
       throw new Error(data.message || "Error desconocido");
@@ -988,7 +1088,7 @@ document.getElementById("btnNewReport").addEventListener("click", () => {
   currentStep = 1;
   renderStep();
   document.getElementById("successScreen").classList.remove("active");
-  document.getElementById("app").style.display = "flex";
+  document.getElementById("formView").style.display = "flex";
 });
 
 renderStep();
