@@ -32,7 +32,7 @@ const HEADERS_BY_TYPE = {
   grupal: [
     ["Fecha reportada", "fecha"], ["Red", "red"], ["Líder de Red", "liderRed"],
     ["Casa de Vida", "casaVida"], ["Líder de Vida", "liderNombre"],
-    ["Bautizados", "m_bautizados"], ["Discípulos", "m_discipulos"], ["Invitados", "m_invitados"],
+    ["Hermanos", "m_hermanos"], ["Nuevo Bautizado", "m_bautizados"], ["Discípulos", "m_discipulos"], ["Invitados", "m_invitados"],
     ["Niños", "m_ninos"], ["Ausentes", "m_ausentes"], ["Visitas a hogares", "m_visitasHogares"],
     ["Decisiones - Adultos", "d_adultos"], ["Decisiones - Niños", "d_ninos"], ["Decisiones - Reconciliados", "d_reconciliados"],
     ["Total Asistencia", "totalAsistencia"],
@@ -69,11 +69,11 @@ const HEADERS_BY_TYPE = {
   empresarial: [
     ["Fecha reportada", "fecha"], ["Red", "red"], ["Líder de Red", "liderRed"],
     ["Casa de Vida", "casaVida"], ["Líder de Vida", "liderNombre"],
-    ["Bautizados", "m_bautizados"], ["Discípulos", "m_discipulos"], ["Invitados", "m_invitados"],
+    ["Hermanos", "m_hermanos"], ["Nuevo Bautizado", "m_bautizados"], ["Discípulos", "m_discipulos"], ["Invitados", "m_invitados"],
     ["Ausentes", "m_ausentes"], ["Visitas a hogares", "m_visitasHogares"],
     ["Decisiones - Adultos", "d_adultos"], ["Decisiones - Reconciliados", "d_reconciliados"],
     ["Total Asistencia", "totalAsistencia"],
-    ["Dominical - Miembros", "dom_miembros"], ["Dominical - Discípulos", "dom_discipulos"], ["Dominical - Invitados", "dom_invitados"],
+    ["Dominical - Hermanos", "dom_hermanos"], ["Dominical - Discípulos", "dom_discipulos"], ["Dominical - Invitados", "dom_invitados"],
     ["Misión Vida", "p_misionVida"], ["Consolidación", "p_consolidacion"], ["Pasos de Vida", "p_pasosVida"],
     ["V.E.A.", "a_vea"], ["Escuela de Vida", "a_escuelaVida"], ["Seminario", "a_seminario"],
     ["Líder de Vida presente", "l_liderVida"], ["Anfitrión presente", "l_anfitrion"],

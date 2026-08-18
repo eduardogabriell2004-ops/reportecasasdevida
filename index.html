@@ -338,7 +338,6 @@
   @keyframes pop{0%{transform:scale(0.6); opacity:0;} 60%{transform:scale(1.08);} 100%{transform:scale(1); opacity:1;}}
   .success-screen h2{font-size:21px; margin-bottom:10px; color:var(--c2);}
   .success-screen > p{font-size:14.5px; color:var(--ink-soft); line-height:1.6; max-width:340px;}
-  .success-screen .btn-primary{flex:none; width:100%; margin-top:22px; max-width:240px;}
 
   .motivation-card{
     position:relative;
@@ -508,7 +507,7 @@
       <div class="step" data-step="2">
         <span class="type-badge" id="typeBadge2"><span class="dot"></span><span>Casa de Vida</span></span>
 
-        <div class="section-title">Miembros (números)</div>
+        <div class="section-title">Miembros</div>
         <div class="grid3" id="miembrosGrid"></div>
 
         <div class="section-title">Decisiones de fe</div>
@@ -644,7 +643,6 @@
     </div>
 
     <span class="screenshot-hint">📸 Toma una captura como comprobante de tu reporte</span>
-    <button type="button" class="btn btn-primary" id="btnNewReport">Enviar otro reporte</button>
   </div>
 
 </div>
@@ -733,10 +731,10 @@ const LIDER_LABELS = { grupal: "Nombre del Líder de Vida", familiar: "Nombre de
 const FIELD_CONFIG = {
   grupal: {
     miembros: [
-      ["m_bautizados","Bautizados"], ["m_discipulos","Discípulos"], ["m_invitados","Invitados"],
+      ["m_hermanos","Hermanos"], ["m_bautizados","Nuevo Bautizado"], ["m_discipulos","Discípulos"], ["m_invitados","Invitados"],
       ["m_ninos","Niños"], ["m_ausentes","Ausentes"], ["m_visitasHogares","Visitas a hogares"]
     ],
-    totalKeys: ["m_bautizados","m_discipulos"],
+    totalKeys: ["m_hermanos","m_bautizados","m_discipulos"],
     decisiones: [["d_adultos","Adultos"], ["d_ninos","Niños"], ["d_reconciliados","Reconciliados"]],
     dominical: [["dom_hermanos","Hermanos"], ["dom_discipulos","Discípulos"], ["dom_invitados","Invitados"], ["dom_ninos","Niños"]],
     lideres: [["l_liderVida","Líder de Vida"], ["l_aprendiz","Aprendiz"], ["l_maestroNinos","Maestro de Niños"], ["l_anfitrion","Anfitrión"]]
@@ -753,12 +751,12 @@ const FIELD_CONFIG = {
   },
   empresarial: {
     miembros: [
-      ["m_bautizados","Bautizados"], ["m_discipulos","Discípulos"], ["m_invitados","Invitados"],
+      ["m_hermanos","Hermanos"], ["m_bautizados","Nuevo Bautizado"], ["m_discipulos","Discípulos"], ["m_invitados","Invitados"],
       ["m_ausentes","Ausentes"], ["m_visitasHogares","Visitas a hogares"]
     ],
-    totalKeys: ["m_bautizados","m_discipulos"],
+    totalKeys: ["m_hermanos","m_bautizados","m_discipulos"],
     decisiones: [["d_adultos","Adultos"], ["d_reconciliados","Reconciliados"]],
-    dominical: [["dom_miembros","Miembros"], ["dom_discipulos","Discípulos"], ["dom_invitados","Invitados"]],
+    dominical: [["dom_hermanos","Hermanos"], ["dom_discipulos","Discípulos"], ["dom_invitados","Invitados"]],
     lideres: [["l_liderVida","Líder de Vida"], ["l_anfitrion","Anfitrión"]]
   }
 };
@@ -1073,22 +1071,6 @@ form.addEventListener("submit", async (e) => {
     document.getElementById("loadingOverlay").classList.remove("active");
     banner.classList.add("active");
   }
-});
-
-document.getElementById("btnNewReport").addEventListener("click", () => {
-  form.reset();
-  casaSelect.innerHTML = '<option value="" disabled selected>Primero selecciona tu red</option>';
-  casaSelect.disabled = true;
-  liderRedInput.value = "";
-  currentTipo = "grupal";
-  buildDynamicFields(currentTipo);
-  document.getElementById("totalBs").textContent = "0";
-  document.getElementById("totalUsd").textContent = "0";
-  document.querySelectorAll(".field.invalid").forEach(f => f.classList.remove("invalid"));
-  currentStep = 1;
-  renderStep();
-  document.getElementById("successScreen").classList.remove("active");
-  document.getElementById("formView").style.display = "flex";
 });
 
 renderStep();
