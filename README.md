@@ -2,8 +2,8 @@
 
 Formulario web para que cada Líder de Vida (Casa Grupal, Familiar o Empresarial) reporte
 semanalmente la información de su Casa de Vida. Los datos se guardan automáticamente en
-una hoja de Google Sheets, organizados en 3 pestañas según el tipo de casa, para que los
-Líderes de Red puedan consultarlos.
+una hoja de Google Sheets, organizados en pestañas por tipo de casa, por Red y en un
+resumen mensual, para que los Líderes de Red puedan consultarlos.
 
 ## Contenido del proyecto
 
@@ -16,9 +16,26 @@ Líderes de Red puedan consultarlos.
 Hoja oficial del proyecto:
 https://docs.google.com/spreadsheets/d/1e2ebw_UpmM4A5dOdca_hp15OiyBmIKIIH3Di7JDsMVg/edit
 
-No necesitas crear las pestañas manualmente: el script las crea solo (Casas Grupales,
-Casas Familiares, Casas Empresariales) la primera vez que alguien envía un reporte de
-cada tipo.
+No necesitas crear las pestañas manualmente: el script las crea y actualiza solo, con
+cada reporte que se envía:
+
+- **Casas Grupales / Casas Familiares / Casas Empresariales** — una fila por cada reporte
+  enviado (la fuente de datos original, nunca se borra ni se reordena).
+- **Red 1 ... Red 6** — se reconstruye automáticamente después de cada envío. Muestra,
+  agrupadas por tipo de casa, solo las filas que pertenecen a esa red, ordenadas de la más
+  reciente a la más antigua. Es la pestaña que cada Líder de Red debe revisar: ahí ve toda
+  la información completa de sus casas de vida, sin tener que filtrar nada.
+- **Resumen Mensual** — también se reconstruye automáticamente. Una fila por cada
+  combinación de Red + Mes, con: N° de reportes recibidos, Total de Asistencia, Total de
+  Decisiones de Fe, Total Bs (diezmo + ofrenda) y Total USD (diezmo + ofrenda). Sirve para
+  ver de un vistazo cómo va cada red mes a mes; se puede ordenar o filtrar por Red.
+
+> Si ya tenías reportes guardados **antes** de instalar esta versión del script, esas filas
+> no van a aparecer solas en "Red N" ni en "Resumen Mensual" hasta que se dispare una
+> reconstrucción. Para generarlas una sola vez con el histórico existente: en el editor de
+> Apps Script, selecciona la función **`rebuildAllRedSheetsAndSummary`** en el menú
+> desplegable de funciones (arriba, junto al botón ▶) y dale **Ejecutar**. De ahí en
+> adelante todo se mantiene al día solo, con cada nuevo envío.
 
 ## Paso 2 — Instalar el script (Apps Script)
 
@@ -90,10 +107,15 @@ porque no se recibió el archivo del logo. Para poner el logo real:
 
 ## Cómo verán la información los Líderes de Red
 
-Cada envío del formulario crea una fila nueva en la pestaña correspondiente de la hoja
-(**Casas Grupales**, **Casas Familiares** o **Casas Empresariales**), con la Red y el
-Líder de Red ya identificados en las primeras columnas. Puedes usar el **filtro de Google
-Sheets** o crear una vista filtrada por Red para que cada líder de red vea solo sus casas.
+Cada Líder de Red debe abrir la pestaña con el nombre de su red (**Red 1** a **Red 6**):
+ahí encuentra, organizadas por tipo de casa (Grupal / Familiar / Empresarial), todas las
+filas que sus casas de vida han reportado, más recientes primero — no necesita filtrar
+nada. Para una vista rápida de todas las redes por mes, usa la pestaña **Resumen Mensual**.
+
+Si en algún momento quieres restringir el acceso (que cada líder de red solo pueda ver o
+editar su propia pestaña), puedes usar **Datos → Hojas y rangos protegidos** en Google
+Sheets para proteger cada pestaña de Red y compartirla solo con ese líder, o crear una
+copia de solo lectura de la hoja completa y compartirla con todos.
 
 ## Verificación rápida
 

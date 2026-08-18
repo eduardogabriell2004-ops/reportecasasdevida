@@ -736,9 +736,9 @@ const FIELD_CONFIG = {
       ["m_bautizados","Bautizados"], ["m_discipulos","Discípulos"], ["m_invitados","Invitados"],
       ["m_ninos","Niños"], ["m_ausentes","Ausentes"], ["m_visitasHogares","Visitas a hogares"]
     ],
-    totalKeys: ["m_bautizados","m_discipulos","m_invitados","m_ninos","m_visitasHogares"],
+    totalKeys: ["m_bautizados","m_discipulos"],
     decisiones: [["d_adultos","Adultos"], ["d_ninos","Niños"], ["d_reconciliados","Reconciliados"]],
-    dominical: [["dom_hermanos","Hermanos"], ["dom_invitados","Invitados"], ["dom_ninos","Niños"]],
+    dominical: [["dom_hermanos","Hermanos"], ["dom_discipulos","Discípulos"], ["dom_invitados","Invitados"], ["dom_ninos","Niños"]],
     lideres: [["l_liderVida","Líder de Vida"], ["l_aprendiz","Aprendiz"], ["l_maestroNinos","Maestro de Niños"], ["l_anfitrion","Anfitrión"]]
   },
   familiar: {
@@ -746,9 +746,9 @@ const FIELD_CONFIG = {
       ["m_adultos26","Adultos (+26 años)"], ["m_jovenes","Jóvenes (13-25 años)"], ["m_ninos112","Niños (1-12 años)"],
       ["m_discipulos","Discípulos"], ["m_invitados","Invitados"], ["m_ausentes","Ausentes"]
     ],
-    totalKeys: ["m_adultos26","m_jovenes","m_ninos112","m_discipulos","m_invitados"],
-    decisiones: [["d_adultos","Adultos"], ["d_ninos","Niños"], ["d_reconciliados","Reconciliados"]],
-    dominical: [["dom_adultos","Adultos"], ["dom_jovenes","Jóvenes"], ["dom_ninos","Niños"]],
+    totalKeys: ["m_discipulos"],
+    decisiones: [["d_adultos","Adultos"], ["d_ninos","Niños (+13 años)"], ["d_reconciliados","Reconciliados"]],
+    dominical: [["dom_adultos","Adultos"], ["dom_jovenes","Jóvenes"], ["dom_ninos","Niños"], ["dom_discipulos","Discípulos"], ["dom_invitados","Invitados"]],
     lideres: [["l_guiaVida","Guía de Vida"]]
   },
   empresarial: {
@@ -756,9 +756,9 @@ const FIELD_CONFIG = {
       ["m_bautizados","Bautizados"], ["m_discipulos","Discípulos"], ["m_invitados","Invitados"],
       ["m_ausentes","Ausentes"], ["m_visitasHogares","Visitas a hogares"]
     ],
-    totalKeys: ["m_bautizados","m_discipulos","m_invitados","m_visitasHogares"],
+    totalKeys: ["m_bautizados","m_discipulos"],
     decisiones: [["d_adultos","Adultos"], ["d_reconciliados","Reconciliados"]],
-    dominical: [["dom_hermanos","Hermanos"], ["dom_invitados","Invitados"]],
+    dominical: [["dom_miembros","Miembros"], ["dom_discipulos","Discípulos"], ["dom_invitados","Invitados"]],
     lideres: [["l_liderVida","Líder de Vida"], ["l_anfitrion","Anfitrión"]]
   }
 };
