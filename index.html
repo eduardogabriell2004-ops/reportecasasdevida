@@ -416,6 +416,65 @@
   }
   @keyframes spin{to{transform:rotate(360deg);}}
 
+  #formView.blurred{
+    filter:blur(7px);
+    pointer-events:none;
+    user-select:none;
+    transition:filter .3s ease;
+  }
+
+  .lock-overlay{
+    position:fixed; inset:0; z-index:60;
+    display:none;
+    align-items:center; justify-content:center;
+    padding:24px;
+    background:rgba(6,30,29,0.62);
+    backdrop-filter:blur(1px);
+  }
+  .lock-overlay.active{display:flex;}
+  .lock-card{
+    width:100%; max-width:380px;
+    background:var(--card);
+    border-radius:22px;
+    padding:34px 26px 30px;
+    text-align:center;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.5);
+    animation:pop .35s ease;
+  }
+  .lock-icon{
+    width:72px; height:72px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    background:var(--gradient);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 14px 30px -10px rgba(0,108,105,0.55);
+  }
+  .lock-card h2{font-size:19px; color:var(--c2); margin-bottom:10px;}
+  .lock-card p{font-size:14px; color:var(--ink-soft); line-height:1.6; margin:0 0 22px;}
+  .lock-card p strong{color:var(--ink);}
+  .lock-countdown{
+    background:linear-gradient(135deg, rgba(0,193,158,0.10), rgba(98,204,204,0.16));
+    border:1.5px solid rgba(0,151,163,0.22);
+    border-radius:16px;
+    padding:16px 14px;
+  }
+  .lock-countdown-label{
+    display:block;
+    font-size:11px; font-weight:700; letter-spacing:.4px;
+    text-transform:uppercase; color:var(--c2); opacity:.85;
+    margin-bottom:6px;
+  }
+  .lock-countdown-timer{
+    font-family:'Poppins',sans-serif;
+    font-size:24px; font-weight:800; color:var(--c2);
+    letter-spacing:.5px;
+  }
+  .lock-reopen-date{
+    display:block;
+    margin-top:8px;
+    font-size:12.5px; font-weight:600; color:var(--ink-soft);
+  }
+
   .banner-error{
     display:none;
     background:#FDEAE6;
@@ -648,6 +707,25 @@
 </div>
 
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+
+<div class="lock-overlay" id="lockOverlay">
+  <div class="lock-card">
+    <div class="lock-icon">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="11" width="14" height="10" rx="2.5" stroke="#fff" stroke-width="2"/>
+        <path d="M8 11V7.5a4 4 0 0 1 8 0V11" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="12" cy="16" r="1.6" fill="#fff"/>
+      </svg>
+    </div>
+    <h2>Tiempo de reporte finalizado</h2>
+    <p>El reporte semanal está disponible de <strong>jueves a lunes 10:00 a.m.</strong> Vuelve a intentarlo cuando se reabra la ventana de reporte.</p>
+    <div class="lock-countdown">
+      <span class="lock-countdown-label">Se reabre en</span>
+      <div class="lock-countdown-timer" id="lockCountdown">--</div>
+      <span class="lock-reopen-date" id="lockReopenDate"></span>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ============================================================
@@ -1001,6 +1079,7 @@ document.getElementById("btnBack").addEventListener("click", () => {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!validateStep(5)) return;
+  if (!isReportWindowOpen()) { location.reload(); return; }
 
   const banner = document.getElementById("banner");
   banner.classList.remove("active");
@@ -1064,6 +1143,8 @@ form.addEventListener("submit", async (e) => {
       document.getElementById("motivationText").textContent = randomMotivation();
       document.getElementById("formView").style.display = "none";
       document.getElementById("successScreen").classList.add("active");
+    } else if (data.result === "closed") {
+      location.reload();
     } else {
       throw new Error(data.message || "Error desconocido");
     }
@@ -1074,6 +1155,71 @@ form.addEventListener("submit", async (e) => {
 });
 
 renderStep();
+
+/* ============================================================
+   VENTANA DE TIEMPO PARA REPORTAR
+   Abierto: jueves, viernes, sábado y domingo (todo el día) y lunes
+   hasta antes de las 10:00 a.m. Cerrado: lunes desde las 10:00 a.m.,
+   martes y miércoles. Se evalúa con la hora del dispositivo del líder.
+   ============================================================ */
+function isReportWindowOpen(date) {
+  date = date || new Date();
+  const day = date.getDay(); // 0=Dom, 1=Lun, ..., 6=Sáb
+  if (day === 4 || day === 5 || day === 6 || day === 0) return true; // Jue, Vie, Sáb, Dom
+  if (day === 1) return (date.getHours() * 60 + date.getMinutes()) < 600; // antes de las 10:00 a.m.
+  return false; // Martes y Miércoles
+}
+
+function nextReportOpenDate(date) {
+  date = date || new Date();
+  const day = date.getDay();
+  const daysUntilThursday = { 1: 3, 2: 2, 3: 1 }[day] || 0; // Lun→+3, Mar→+2, Mié→+1
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + daysUntilThursday, 0, 0, 0, 0);
+}
+
+(function initReportWindowLock() {
+  const overlay = document.getElementById("lockOverlay");
+  const formView = document.getElementById("formView");
+  let countdownTimer = null;
+
+  function updateCountdown(next) {
+    const diff = next.getTime() - Date.now();
+    if (diff <= 0) { location.reload(); return; }
+    const totalSeconds = Math.floor(diff / 1000);
+    const d = Math.floor(totalSeconds / 86400);
+    const h = Math.floor((totalSeconds % 86400) / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    const parts = [];
+    if (d > 0) parts.push(d + "d");
+    parts.push(String(h).padStart(2, "0") + "h");
+    parts.push(String(m).padStart(2, "0") + "m");
+    parts.push(String(s).padStart(2, "0") + "s");
+    document.getElementById("lockCountdown").textContent = parts.join(" ");
+  }
+
+  function render() {
+    const now = new Date();
+    if (isReportWindowOpen(now)) {
+      overlay.classList.remove("active");
+      formView.classList.remove("blurred");
+      if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+      return;
+    }
+    overlay.classList.add("active");
+    formView.classList.add("blurred");
+    const next = nextReportOpenDate(now);
+    const dateLabel = next.toLocaleDateString("es-VE", { weekday: "long", day: "numeric", month: "long" });
+    document.getElementById("lockReopenDate").textContent =
+      "Se abre el " + dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1) + " a las 12:00 a.m.";
+    updateCountdown(next);
+    if (!countdownTimer) {
+      countdownTimer = setInterval(() => updateCountdown(nextReportOpenDate(new Date())), 1000);
+    }
+  }
+
+  render();
+})();
 </script>
 </body>
 </html>

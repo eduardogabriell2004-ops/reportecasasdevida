@@ -21,6 +21,29 @@ const SHEET_NAMES = {
 
 const REDES_LIST = ["Red 1", "Red 2", "Red 3", "Red 4", "Red 5", "Red 6"];
 
+const REPORT_TIMEZONE = "America/Caracas";
+
+/**
+ * Ventana de tiempo para reportar (hora de Venezuela, sin importar la
+ * configuración regional del script): abierto jueves, viernes, sábado y
+ * domingo todo el día, y lunes hasta antes de las 10:00 a.m. Cerrado el
+ * resto del lunes, y todo el martes y miércoles. Esta es la validación
+ * "real" — el candado que se ve en el formulario es solo una ayuda visual
+ * basada en la hora del celular de cada líder, que se podría manipular;
+ * esta función es la que de verdad decide si el reporte se guarda o no.
+ */
+function isReportWindowOpen() {
+  const now = new Date();
+  const dow = Number(Utilities.formatDate(now, REPORT_TIMEZONE, "u")); // 1=Lun ... 7=Dom
+  if (dow === 4 || dow === 5 || dow === 6 || dow === 7) return true; // Jue, Vie, Sáb, Dom
+  if (dow === 1) {
+    const hh = Number(Utilities.formatDate(now, REPORT_TIMEZONE, "H"));
+    const mm = Number(Utilities.formatDate(now, REPORT_TIMEZONE, "m"));
+    return (hh * 60 + mm) < 600; // antes de las 10:00 a.m.
+  }
+  return false; // Martes y Miércoles
+}
+
 const MES_LABELS = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
@@ -87,6 +110,13 @@ const HEADERS_BY_TYPE = {
 
 function doPost(e) {
   try {
+    if (!isReportWindowOpen()) {
+      return ContentService.createTextOutput(JSON.stringify({
+        result: "closed",
+        message: "El tiempo para reportar ha finalizado. El reporte se reabre el jueves."
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
     const data = JSON.parse(e.postData.contents);
     const tipo = data.tipo;
     const sheetName = SHEET_NAMES[tipo];
